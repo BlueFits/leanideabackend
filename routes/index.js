@@ -25,7 +25,7 @@ router.get("/pub_entries/:userId", getPublicEntries);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('Salut');
+  res.send('This is it');
 });
 
 
