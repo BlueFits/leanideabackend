@@ -1,9 +1,12 @@
+const mongoose = require("mongoose");
+
 const Entry = require("../models/Entry");
 
 exports.addEntry = async (req, res, next) => {
-    const { category, description, userId } = req.body;
+    const { category, description, userId, title } = req.body;
 
     const entryInstance = new Entry({
+        title,
         category,
         description,
         user: userId ? userId : null,
@@ -34,9 +37,16 @@ exports.updateEntry = async (req, res, next) => {
 exports.removeEntry = async (req, res, next) => {
     const { entryId } = req.body;
 
-    await Entry.findByIdAndRemove(entryId, {}, (err, result) => {
+    let cleanedId = entryId.toString().trim();
+    const id = mongoose.Types.ObjectId(cleanedId);
+
+    await Entry.findByIdAndRemove(id, {}, (err, result) => {
         if (err) {return next(err);}
-        res.status(200).send("removed: " + result);
+        if (!result) {
+            console.log("Cannot find result");
+        } else {
+            res.status(200).send(result);
+        }
     });
 };
 
@@ -87,7 +97,6 @@ exports.getAllEntries = async (req, res, next) => {
 
     await Entry.find({ user: userId }).exec((err, entries) => {
         if (err) { return next(err); }
-
         res.status(200).send(entries);
     });
 };

@@ -17,7 +17,7 @@ router.post("/add_entry", addEntry);
 
 router.post("/update_entry", updateEntry);
 
-router.post("/remove_entry", removeEntry);
+router.post("/util/remove_entry", removeEntry);
 
 router.post("/update_privacy", updatePrivacy);
 
