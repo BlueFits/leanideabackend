@@ -2,6 +2,15 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
+exports.getUser = async (req, res, next) => {
+    const { id } = req.query;
+    console.log(id);
+    await User.findOne({ _id: id }).exec((err, user) => {
+        if (!user) res.status(409).send("User doesn't exist");
+        res.status(201).send(user);
+    })
+};
+
 exports.addUser = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
